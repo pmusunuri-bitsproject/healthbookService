@@ -1,0 +1,54 @@
+{
+    "bd0888b5-c817-5bbe-8187-36b952d5d50d": {
+        "name": "krishna",
+        "organizations": [
+            {
+                "name": "ravi clinic",
+                "id": "bd5e5eb0-49f3-5071-b5f5-4f5a571ba6b9"
+            }
+        ],
+        "npi": "2345678901",
+        "phone": "8861486682",
+        "address": "Prashanti Nagar",
+        "id": "bd0888b5-c817-5bbe-8187-36b952d5d50d"
+    },
+    "112dd040-f3a8-5a7f-abde-0ba53f4aef71": {
+        "name": "Anil",
+        "organizations": [
+            {
+                "name": "raju clinic",
+                "id": "ff73c65f-57ba-5f96-a7ed-48b0dd52076b"
+            }
+        ],
+        "npi": "2345678900",
+        "phone": "8861486684",
+        "address": "Prashanti Hills",
+        "id": "112dd040-f3a8-5a7f-abde-0ba53f4aef71"
+    },
+    "e34962c4-fdef-547d-90b8-68c8b53cf11f": {
+        "name": "Ajay",
+        "organizations": [
+            {
+                "name": "apollo Labs",
+                "id": "01b307ac-ba4f-54f5-9aaf-c33bb06bbbf6"
+            }
+        ],
+        "npi": "7782990300",
+        "phone": "8888999900",
+        "address": "Rajiv Nagar",
+        "id": "e34962c4-fdef-547d-90b8-68c8b53cf11f"
+    },
+    "59ee9536-dcb1-5b12-bffb-a93eb20a404f": {
+        "name": "Suchi",
+        "organizations": [
+            {
+                "name": "apollo Labs",
+                "id": "01b307ac-ba4f-54f5-9aaf-c33bb06bbbf6"
+            }
+        ],
+        "npi": "77829903002",
+        "phone": "8888999955",
+        "address": "Raj Colony",
+        "id": "59ee9536-dcb1-5b12-bffb-a93eb20a404f"
+    }
+}

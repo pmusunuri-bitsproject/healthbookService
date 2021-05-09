@@ -1,13 +1,13 @@
+const { json } = require('express')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 var path = require('path')
 const router = express.Router()
-
-require('dotenv').config()
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'))
-})
+app.use(cors())
+app.use('/organizations', require('./service/OrganizationService'))
+app.use('/providers', require('./service/ProviderService'))
+app.use('/user', require('./service/UserService'))
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
