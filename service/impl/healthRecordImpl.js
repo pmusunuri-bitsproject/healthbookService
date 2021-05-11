@@ -92,7 +92,7 @@ module.exports.getHealthRecordsByType = (id, type) => {
             if(type == "LAB_REPORT"){
                 return transformToLabReport(healthRec)
             }else{
-                return healthRec
+                return transformToPrescription(healthRec)
             }
         })
     }
@@ -110,6 +110,24 @@ function transformToLabReport(healthRecord){
     record.labAddress = healthRecord.organizationAddress
     record.refByDoctor = healthRecord.referredbyProviderName
     record.labPhone = providerDbo[healthRecord.createdBy].phone
+    return record
+}
+
+function transformToPrescription(healthRecord){
+    let providerDbo = datastore.getProviderDbo()
+    let record = {}
+    record.id = healthRecord.id
+    record.datetime = healthRecord.createDate
+    record.hospitalName = healthRecord.organizationName
+    record.hospitalAddress = healthRecord.organizationAddress
+    record.clinicianName = healthRecord.providerName
+    let medicationList = []
+    healthRecord.medication.map((medication) => {
+        medicationList.push(`${medication.name}-${medication.dosage} ${medication.unit}-${medication.frequency}`)
+    })
+    record.labReportsOrdered = healthRecord.labReportsOrdered
+    record.medication = medicationList
+    record.phone = providerDbo[healthRecord.createdBy].phone
     return record
 }
 
@@ -159,6 +177,5 @@ function buildLabReportResource(userid, body){
     resource.verifiedbyProviderId = body.verifiedBy
     resource.referredbyProviderName = providerDbo[body.referredBy].name
     resource.verifiedbyProviderName = providerDbo[body.verifiedBy].name
-    return resource    
+    return resource
 }
-        
