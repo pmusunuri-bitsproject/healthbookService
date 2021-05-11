@@ -3,14 +3,10 @@ const app = express()
 const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
-var providerOrgDbo = getProviderOrgDbo()
-
-function getProviderOrgDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providerOrganization.json'))
-    return data
-}
+const datastore = require('../../dataStore')
 
 module.exports.getAvailability = (providerid, orgId, datefilter) => {
+    let providerOrgDbo = datastore.getProviderOrgDbo()
     let providerOrgId = uuid(JSON.stringify({
         providerid: providerid,
         organizationId: orgId
@@ -21,6 +17,7 @@ module.exports.getAvailability = (providerid, orgId, datefilter) => {
 }
 
 module.exports.getAvailabilityWithoutFilter = (providerid, orgId) => {
+    let providerOrgDbo = datastore.getProviderOrgDbo()
     let providerOrgId = uuid(JSON.stringify({
         providerid: providerid,
         organizationId: orgId

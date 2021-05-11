@@ -3,17 +3,13 @@ const app = express()
 const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
-var healthRecordAccessDbo = gethealthRecordAccessDbo()
 const moment = require('moment')
+const datastore = require('../../dataStore')
 
-
-function gethealthRecordAccessDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/healthRecordAccess.json'))
-    return data
-}
 
 module.exports.addHealthRecordAccess = (accessArr, fhirId) =>{
     let healthRecordAccess = {}
+    let healthRecordAccessDbo = datastore.gethealthRecordAccessDbo()
     accessArr.forEach(element => {
         if(healthRecordAccessDbo[element] != undefined){
             healthRecordAccessDbo[element].healthRecords.push(fhirId)

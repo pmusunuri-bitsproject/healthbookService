@@ -3,47 +3,13 @@ const app = express()
 const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
-var providerOrgDbo = getProviderOrganizationDbo()
-var userDbo = getUserDbo()
-var userAppointmentsDbo = getUserAppointmentDbo()
-var providerAppointmentsDbo = getProviderAppointmentDbo()
-var providerDbo = getProviderDbo()
-var orgDbo = getOrganizationDbo()
+const datastore = require('../../dataStore')
 const moment = require('moment')
 const healthRecordAcessImpl = require('./healthRecordAccessImpl')
 
-function getProviderOrganizationDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providerOrganization.json'))
-    return data
-}
-
-function getProviderDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providers.json'))
-    return data
-}
-
-function getOrganizationDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/organizations.json'))
-    return data
-}
-
-function getUserDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/user.json'))
-    return data
-}
-
-function getProviderAppointmentDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providerAppointment.json'))
-    return data
-}
-
-function getUserAppointmentDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/userAppointment.json'))
-    return data
-}
-
 function updateAvailabilitySlot (appointmentTimeSlot, appointmentDate, providerOrgId){
-    providerAvailability = providerOrgDbo[providerOrgId].timeSlots
+    let providerOrgDbo = datastore.getProviderOrgDbo()
+    let providerAvailability = providerOrgDbo[providerOrgId].timeSlots
     let availableTimeSlot = []
     providerAvailability[appointmentDate].forEach( slot => {
         if(slot != appointmentTimeSlot){
@@ -56,6 +22,7 @@ function updateAvailabilitySlot (appointmentTimeSlot, appointmentDate, providerO
 }
 
 module.exports.storeUser = (body) =>{
+    let userDbo = datastore.getUserDbo()
     let user = {}
     let dob =  moment(new Date(body.dob)).format('YYYY-MM-DD')
     let id = uuid(body.email)
@@ -71,6 +38,7 @@ module.exports.storeUser = (body) =>{
 }
 
 module.exports.getUser = (id) => {
+    let userDbo = datastore.getUserDbo()
     user = userDbo[id]
     return user
 }
@@ -96,6 +64,7 @@ module.exports.bookAppointment = (userid, body) => {
 }
 
 module.exports.getAppointments = (userid) => {
+    let userAppointmentsDbo = datastore.getUserAppointmentDbo()
     let userAppointments = []
     let currentDate = moment(new Date()).format('YYYY-MM-DD')
     let userAppointment = userAppointmentsDbo[userid]
@@ -121,6 +90,7 @@ module.exports.getAppointments = (userid) => {
 }
 
 module.exports.getReferredProviders = (userid) => {
+    let userAppointmentsDbo = datastore.getUserAppointmentDbo()
     let referredProviders = []
     const providerSet = new Set()
     let userAppointments = []
@@ -150,6 +120,9 @@ module.exports.provideHealthRecordAccess = (body) => {
 }
 
 const updateUserAppointments = (userAppUpdateRequest) => {
+    let providerDbo = datastore.getProviderDbo()
+    let orgDbo = datastore.getOrganizationDbo()
+    let userAppointmentsDbo = datastore.getUserAppointmentDbo()
     let userAppointments = {}
     let userAppointmentList = []
     const request = userAppUpdateRequest.request
@@ -191,6 +164,8 @@ const updateUserAppointments = (userAppUpdateRequest) => {
 }
 
 const updateProviderAppointments = (providerAppUpdateRequest) => {
+    let userDbo = datastore.getUserDbo()
+    let providerAppointmentsDbo = datastore.getProviderAppointmentDbo()
     const request = providerAppUpdateRequest.request
     const providerOrgId = providerAppUpdateRequest.providerOrgId
     const userid = providerAppUpdateRequest.userid

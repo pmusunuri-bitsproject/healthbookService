@@ -3,41 +3,15 @@ const app = express()
 const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
-var healthRecordDbo = getHealthRecordDbo()
-var userDbo = getUserDbo()
-var providerDbo = getProviderDbo()
-var orgDbo = getOrgDbo()
-var healthRecordAccessDbo = gethealthRecordAccessDbo()
+const datastore = require('../../dataStore')
 const moment = require('moment')
 const healthRecordAccessImpl = require('./healthRecordAccessImpl')
 
-function getHealthRecordDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/healthRecord.json'))
-    return data
-}
-
-function gethealthRecordAccessDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/healthRecordAccess.json'))
-    return data
-}
-
-function getUserDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/user.json'))
-    return data
-}
-
-function getOrgDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/organizations.json'))
-    return data
-}
-
-function getProviderDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providers.json'))
-    return data
-}
-
 
 module.exports.storeHealthRecord = (userid, body) => {
+    let orgDbo = datastore.getOrganizationDbo()
+    let healthRecordDbo = datastore.getHealthRecordDbo()
+    let providerDbo = datastore.getProviderDbo()
     let healthRecord = {}
     let createDate = moment(new Date()).format('YYYY-MM-DDTHH:mm:ssZ')
     let createdBy = body.createdBy
@@ -82,6 +56,8 @@ module.exports.storeHealthRecord = (userid, body) => {
 }
 
 module.exports.getHealthRecords = (id) => {
+    let healthRecordDbo = datastore.getHealthRecordDbo()
+    let healthRecordAccessDbo = datastore.gethealthRecordAccessDbo()
     let healthRecordList = []
     let healthRecords = []
     if(healthRecordAccessDbo[id] != undefined){
@@ -96,6 +72,9 @@ module.exports.getHealthRecords = (id) => {
 }
 
 module.exports.getHealthRecordsByType = (id, type) => {
+    let healthRecordDbo = datastore.getHealthRecordDbo()
+    let healthRecordAccessDbo = datastore.gethealthRecordAccessDbo()
+
     let healthRecordList = []
     let healthRecords = []
     let filteredRecords = []
@@ -122,6 +101,7 @@ module.exports.getHealthRecordsByType = (id, type) => {
 }
 
 function transformToLabReport(healthRecord){
+    let providerDbo = datastore.getProviderDbo()
     let record = {}
     record.id = healthRecord.id
     record.datetime = healthRecord.createDate
@@ -134,6 +114,7 @@ function transformToLabReport(healthRecord){
 }
 
 function buildPrescriptionResource(userid, request){
+    let userDbo = datastore.getUserDbo()
     let resource = {}
     resource.patient = {
         id: uuid(JSON.stringify({
@@ -161,6 +142,7 @@ function buildPrescriptionResource(userid, request){
 }
 
 function buildLabReportResource(userid, body){
+    let providerDbo = datastore.getProviderDbo()
     let resource = {}
     resource.patient = {
         id: uuid(JSON.stringify({
@@ -175,7 +157,6 @@ function buildLabReportResource(userid, body){
     resource.report = body.report
     resource.referredbyProviderId = body.referredBy
     resource.verifiedbyProviderId = body.verifiedBy
-    console.log(body)
     resource.referredbyProviderName = providerDbo[body.referredBy].name
     resource.verifiedbyProviderName = providerDbo[body.verifiedBy].name
     return resource    

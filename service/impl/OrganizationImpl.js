@@ -4,27 +4,11 @@ const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
 const moment = require('moment')
-var orgDbo = getOrganizationDbo()
-var providerDbo = getProviderDbo()
-var providerOrgDbo = getProviderOrgDbo()
+const datastore = require('../../dataStore')
 var dateUtils = require('../../utils/DateUtils')
 
-function getOrganizationDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/organizations.json'))
-    return data
-}
-
-function getProviderDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providers.json'))
-    return data
-}
-
-function getProviderOrgDbo(){
-    let data = JSON.parse(fs.readFileSync('datastore/providerOrganization.json'))
-    return data
-}
-
 module.exports.addOrganization = (body) => {
+    let orgDbo = datastore.getOrganizationDbo()
     let org = {}
     let id = uuid(body.tin)
     org.name = body.name
@@ -43,11 +27,13 @@ module.exports.addOrganization = (body) => {
 }
 
 module.exports.getOrganizationById = (id) => {
+    let orgDbo = datastore.getOrganizationDbo()
     console.log(`Fetch orgs for Id: ${id}`)
     return orgDbo[id]
 }
 
 module.exports.getOrganizations = () => {
+    let orgDbo = datastore.getOrganizationDbo()
     let response = []
     for (const [key, value] of Object.entries(orgDbo)) {
         response.push(value)
@@ -56,6 +42,10 @@ module.exports.getOrganizations = () => {
 }
 
 module.exports.addProviderToOrganization = (id, body) => {
+    let orgDbo = datastore.getOrganizationDbo()
+    let providerDbo = datastore.getProviderDbo()
+    let providerOrgDbo = datastore.getProviderOrgDbo()
+    
     orgDbo[id].providers.push({
         name: body.name,
         id: body.providerId
@@ -66,12 +56,7 @@ module.exports.addProviderToOrganization = (id, body) => {
         providerid: body.providerId,
         organizationId: id
     })
-    console.log(uuidString)
     let providerOrgId = uuid(uuidString)
-
-    console.log(providerOrgId)
-
-    console.log(providerOrgId)
     providerDbo[body.providerId].organizations.push({
         name: orgName,
         id: orgId
