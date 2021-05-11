@@ -24,17 +24,21 @@ function updateAvailabilitySlot (appointmentTimeSlot, appointmentDate, providerO
 module.exports.storeUser = (body) =>{
     let userDbo = datastore.getUserDbo()
     let user = {}
-    let dob =  moment(new Date(body.dob)).format('YYYY-MM-DD')
+    let dob = ''
+    if (body.dob){
+        dob =  moment(new Date(body.dob)).format('YYYY-MM-DD')
+    }
     let id = uuid(body.email)
     user.id = id
     user.email = body.email
-    user.contact = body.contact
+    user.contact = body.contact || ''
     user.name = body.name
     user.dob = dob
+    user.location = body.location || ''
     userDbo[id] = user
     let data = JSON.stringify(userDbo)
     fs.writeFileSync('datastore/user.json', data)
-    return {id: user.id}
+    return user
 }
 
 module.exports.getUser = (id) => {
