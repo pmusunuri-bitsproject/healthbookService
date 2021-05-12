@@ -78,9 +78,9 @@ router.get('/:id/referredProviders/', (req, res) => {
     }
 })
 
-router.post('/healthRecord', jsonParser, (req, res) => {
-    if(req.body != undefined && req.query.access == "provide"){
-        return res.status(201).send(userImpl.provideHealthRecordAccess(req.body))
+router.post('/:id/healthRecordAccess', jsonParser, (req, res) => {
+    if(req.body != undefined){
+        return res.status(201).send(userImpl.provideHealthRecordAccess(req.params.id, req.body))
     } else {
         return res.status(500).json({error: "Internal Server Error"})
     }
