@@ -113,14 +113,13 @@ module.exports.getReferredProviders = (userid) => {
     return referredProviders
 }
 
-module.exports.provideHealthRecordAccess = (body) => {
+module.exports.provideHealthRecordAccess = (userid, body) => {
     try{
-        healthRecordAcessImpl.addHealthRecordAccess([body.providers], body.recordId)
+         return healthRecordAcessImpl.giveHealthRecordHistoryAccess(userid, body.providers)
     }catch(ex){
         console.log(ex)
-        return null
+        return {"message": "failed to share healthrecords"}
     }
-    return {status: "success"}
 }
 
 const updateUserAppointments = (userAppUpdateRequest) => {
