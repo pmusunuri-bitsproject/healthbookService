@@ -39,6 +39,16 @@ router.get('/:id', (req, res) => {
     }
 })
 
+router.get('/details/:id', (req, res) => {
+    let provider = providerImpl.getProviderDetailsByNpi(req.params.id)
+    console.log(provider)
+    if (provider.npi == undefined){
+        return res.status(400).send(provider)
+    }else{
+        return res.status(200).send(provider)
+    }
+})
+
 router.get('/:id/:orgId/availability/', (req, res) => {
     let availability = null
     if(req.query.datefilter != undefined) {

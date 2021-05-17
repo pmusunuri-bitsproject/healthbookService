@@ -36,3 +36,30 @@ module.exports.getProviders = () => {
     })
     return response
 }
+
+module.exports.getProviderDetailsByNpi = (npi) => {
+    let providerDbo = datastore.getProviderDbo()
+    console.log(`Fetch providerdetails by npi ${uuid(npi)}`)
+    let response = {}
+    let providerid = uuid(npi)
+    if (providerDbo[providerid]){
+        return providerDbo[providerid]
+    }else{
+        return {error: "data not found"}
+    }
+}
+
+/*module.exports.getProviderAppointments = (providerid, orgId) => {
+    let providerOrgDbo = datastore.getProviderOrgDbo()
+    let id = uuid(JSON.stringify({
+        providerid: providerId,
+        organizationId: orgId
+    }))
+     let response = []
+    if (providerOrgDbo[id]){
+        let providerOrgDetails = {}
+        return response.push(appointment)
+    }else{
+        return {error: "data not found"}
+   }
+}*/
