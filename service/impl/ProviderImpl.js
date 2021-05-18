@@ -4,6 +4,7 @@ const router = express.Router()
 const fs = require('fs')
 const uuid = require('uuid-by-string')
 const datastore = require('../../dataStore')
+const providerOrgImpl = require('./providerOrganizationImpl')
 
 module.exports.addProvider = (body) => {
     let providerDbo = datastore.getProviderDbo()
@@ -49,17 +50,8 @@ module.exports.getProviderDetailsByNpi = (npi) => {
     }
 }
 
-/*module.exports.getProviderAppointments = (providerid, orgId) => {
-    let providerOrgDbo = datastore.getProviderOrgDbo()
-    let id = uuid(JSON.stringify({
-        providerid: providerId,
-        organizationId: orgId
-    }))
-     let response = []
-    if (providerOrgDbo[id]){
-        let providerOrgDetails = {}
-        return response.push(appointment)
-    }else{
-        return {error: "data not found"}
-   }
-}*/
+module.exports.getProviderAppointments = (providerid, orgId) => {
+    let appointmentData = {}
+    appointmentData =  providerOrgImpl.getAppointments(providerid, orgId)
+    return appointmentData
+}

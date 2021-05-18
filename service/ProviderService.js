@@ -74,4 +74,16 @@ router.get('/:id/sharedHealthRecords/', (req, res) => {
 })
 
 
+router.get('/:id/:orgId/appointments/', (req, res) => {
+    let appointments = null
+    appointments = providerImpl.getProviderAppointments(req.params.id, req.params.orgId)
+    if(appointments != null){
+        return res.status(200).send(appointments)
+        
+    }else{
+        return res.status(400).json({error: "Data not found"})
+    }
+})
+
+
 module.exports = router

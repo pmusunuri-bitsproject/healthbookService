@@ -45,9 +45,9 @@ module.exports.addProviderToOrganization = (id, body) => {
     let orgDbo = datastore.getOrganizationDbo()
     let providerDbo = datastore.getProviderDbo()
     let providerOrgDbo = datastore.getProviderOrgDbo()
-    
+    let provider = providerDbo[body.providerId]
     orgDbo[id].providers.push({
-        name: body.name,
+        name: provider.name,
         id: body.providerId
     })
     let orgId = id

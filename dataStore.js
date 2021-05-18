@@ -48,15 +48,12 @@ module.exports.getUserDbo = () => {
     return data
 }
 
-module.exports.getProviderAppointmentDbo = () => {
-    let data = JSON.parse(fs.readFileSync('datastore/providerAppointment.json'))
+module.exports.getAppointmentDbo = () => {
+    let data = JSON.parse(fs.readFileSync('datastore/appointments.json'))
     return data
 }
 
-module.exports.getUserAppointmentDbo = () => {
-    let data = JSON.parse(fs.readFileSync('datastore/userAppointment.json'))
+module.exports.getAppointmentParticipantDbo = () => {
+    let data = JSON.parse(fs.readFileSync('datastore/appointmentParticipant.json'))
     return data
 }
-
-
-

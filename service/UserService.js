@@ -70,6 +70,7 @@ router.get('/:id/healthRecord/', (req, res) => {
 })
 
 router.get('/:id/referredProviders/', (req, res) => {
+    console.log(req.params.id)
     let referredProviders = userImpl.getReferredProviders(req.params.id)
     if (referredProviders != null){
         return res.status(200).json({referredProviders: referredProviders})
