@@ -8,16 +8,13 @@ const datastore = require('../../dataStore')
 const providerOrgImpl = require('./providerOrganizationImpl')
 
 updateAppointmentParticipant = (appointmentid, participants) => {
+    console.log(appointmentid)
+    console.log(participants)
     let appointmentParticipantDbo = datastore.getAppointmentParticipantDbo()
     participants.forEach(participant => {
-        let appointmentParticipants = []
-        if (appointmentParticipantDbo[participant] != undefined){
-            appointmentParticipants = appointmentParticipantDbo[participant]
-            appointmentParticipants.push(appointmentid)  
-        }else{
-            appointmentParticipants.push(appointmentid)
-        }
-        appointmentParticipantDbo[participant] = appointmentParticipants
+        let appointments = appointmentParticipantDbo[participant] || []
+        appointments.push(appointmentid)
+        appointmentParticipantDbo[participant] = appointments
         let data = JSON.stringify(appointmentParticipantDbo)
         fs.writeFileSync('datastore/appointmentParticipant.json', data)
     })
@@ -142,8 +139,7 @@ module.exports.getReferredProviders = (userid) => {
     let appointmentParticipantDbo = datastore.getAppointmentParticipantDbo()
     let referredProviders = []
     const providerSet = new Set()
-    let appointments = appointmentParticipantDbo[userid]
-    console.log(userid)
+    let appointments = appointmentParticipantDbo[userid] || []
     if(appointments.length > 0){
         appointments.forEach(appointmentid => {
             let appointment = appointmentsDbo[appointmentid]
