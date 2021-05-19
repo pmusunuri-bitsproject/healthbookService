@@ -13,7 +13,7 @@ updateAppointmentParticipant = (appointmentid, participants) => {
         let appointmentParticipants = []
         if (appointmentParticipantDbo[participant] != undefined){
             appointmentParticipants = appointmentParticipantDbo[participant]
-            appointmentParticipant.push(appointmentid)  
+            appointmentParticipants.push(appointmentid)  
         }else{
             appointmentParticipants.push(appointmentid)
         }
